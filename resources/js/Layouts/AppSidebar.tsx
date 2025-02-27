@@ -14,11 +14,11 @@ import {
 const hrManagement = [
     {
         title: 'Home',
-        url: '#',
+        url: 'dashboard',
     },
     {
         title: 'Employee',
-        url: '#',
+        url: 'employee',
     },
     {
         title: 'Department',
@@ -38,6 +38,8 @@ const workflowManagement = [
 ];
 
 export function AppSidebar() {
+    const current = route().current();
+
     return (
         <Sidebar>
             <SidebarHeader>
@@ -52,7 +54,10 @@ export function AppSidebar() {
                         <SidebarMenu>
                             {hrManagement.map((item, index) => (
                                 <SidebarMenuItem key={index}>
-                                    <SidebarMenuButton asChild>
+                                    <SidebarMenuButton
+                                        asChild
+                                        isActive={current == item.url}
+                                    >
                                         <a href={item.url}>{item.title}</a>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
@@ -61,7 +66,7 @@ export function AppSidebar() {
                     </SidebarGroupContent>
                 </SidebarGroup>
                 <SidebarGroup>
-                    <SidebarGroupLabel>Workflow Management</SidebarGroupLabel>
+                    <SidebarGroupLabel>Workflow Management </SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {workflowManagement.map((item, index) => (

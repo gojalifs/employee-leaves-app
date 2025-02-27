@@ -1,3 +1,4 @@
+import AppBar from '@/Layouts/AppBar';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import MainLayout from '@/Layouts/MainLayout';
 import { Head } from '@inertiajs/react';
@@ -6,6 +7,7 @@ export default function Dashboard() {
     return (
         <MainLayout>
             <Head title="Dashboard" />
+            <AppBar title="HRIS - Leave Management" />
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">

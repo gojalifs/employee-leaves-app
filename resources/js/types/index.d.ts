@@ -1,6 +1,12 @@
+import { Department } from "./department";
+import { Position } from "./position";
+
 export interface User {
     id: number;
     name: string;
+    department: Department;
+    position: Position;
+    address: string;
     email: string;
     email_verified_at?: string;
 }

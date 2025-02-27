@@ -1,4 +1,5 @@
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { Toaster } from 'sonner';
 import { AppSidebar } from './AppSidebar';
 
 export default function MainLayout({
@@ -9,14 +10,10 @@ export default function MainLayout({
     return (
         <SidebarProvider>
             <AppSidebar />
-            <main>
+            <main className="w-full">
                 <SidebarTrigger />
                 <section id="main-content" className="mx-4 my-2">
-                    <div className="w-full border-b border-gray-200 pb-4">
-                        <h1 className="text-3xl font-bold">
-                            HRIS - Leave Management
-                        </h1>
-                    </div>
+                    <Toaster />
                     <div>{children}</div>
                 </section>
             </main>
