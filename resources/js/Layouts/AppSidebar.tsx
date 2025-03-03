@@ -1,6 +1,7 @@
 import {
     Sidebar,
     SidebarContent,
+    SidebarFooter,
     SidebarGroup,
     SidebarGroupContent,
     SidebarGroupLabel,
@@ -80,6 +81,18 @@ export function AppSidebar() {
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
+            <SidebarFooter>
+                <SidebarMenu>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton
+                            asChild
+                            className="bg-red-300 hover:bg-red-400 hover:text-white"
+                        >
+                            <a href="/logout">Logout</a>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                </SidebarMenu>
+            </SidebarFooter>
         </Sidebar>
     );
 }

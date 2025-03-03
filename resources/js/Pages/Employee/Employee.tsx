@@ -1,9 +1,9 @@
 import AppBar from '@/Layouts/AppBar';
 import MainLayout from '@/Layouts/MainLayout';
 import { User } from '@/types';
-import { Head } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
+import DataTable from '../../Components/Data-Table';
 import { columns } from './Columns';
-import { DataTable } from './Data-Table';
 
 interface EmployeeProps {
     data: User[];
@@ -14,24 +14,6 @@ interface EmployeeProps {
 }
 
 export default function Employee({ users }: { users: User[] }) {
-    // const [query, setQuery] = React.useState('');
-    // const [page, setPage] = React.useState(1);
-    // const [perPage, setPerPage] = React.useState(users.perPage || 10);
-
-    // useEffect(() => {
-    //     const debouncedFetch = debounce(() => {
-    //         router.get(
-    //             route('employee'),
-    //             { search: query, perPage, page },
-    //             { preserveState: true, replace: true },
-    //         );
-    //     }, 500);
-
-    //     debouncedFetch();
-
-    //     return debouncedFetch.cancel();
-    // }, [query, page, perPage]);
-
     return (
         <MainLayout>
             <Head title="Employee" />
@@ -47,11 +29,23 @@ export default function Employee({ users }: { users: User[] }) {
                         <DataTable
                             columns={columns}
                             data={users}
-                            // links={users.links}
+                            filterColumnName="email"
+                            addDataButton={<AddUserButton />}
                         />
                     </div>
                 </div>
             </div>
         </MainLayout>
+    );
+}
+
+function AddUserButton() {
+    return (
+        <button
+            onClick={() => router.visit(route('employee.add'))}
+            className="ml-4 rounded-md bg-blue-500 px-4 py-2 text-white"
+        >
+            Add New User
+        </button>
     );
 }

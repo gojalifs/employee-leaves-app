@@ -7,6 +7,8 @@ use App\Models\Departments;
 use App\Models\Positions;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
@@ -59,6 +61,33 @@ class UserController extends Controller
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             return back()->withErrors(['msg' => 'Failed to add employee']);
+        }
+    }
+
+    public function set_password()
+    {
+        return Inertia::render('Password/ChangePasswordPage');
+    }
+
+    public function store_password(Request $request)
+    {
+        try {
+            $rules = [
+                'password'  => 'required|min:8|confirmed',
+            ];
+            $request->validate($rules);
+
+            $user = User::find(Auth::user()->id);
+            $user->password = Hash::make($request->password);
+            $user->is_default_password = 0;
+            $user->save();
+
+            return to_route('dashboard')->with('success', 'success change password!');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return back()->withErrors($e->getMessage());
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            return back()->withErrors(['msg' => 'Something error!']);
         }
     }
 }
