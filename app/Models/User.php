@@ -6,11 +6,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    /**
+     * This model uses the following traits:
+     * - HasFactory: Provides factory methods for creating model instances.
+     * - Notifiable: Allows the model to send notifications.
+     * - HasRoles: Adds role-based authorization capabilities to the model.
+     */
+    use HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -54,7 +60,8 @@ class User extends Authenticatable
         return $this->belongsTo(Departments::class, 'departments_id');
     }
 
-    public function position(){
+    public function position()
+    {
         return $this->belongsTo(Positions::class, 'positions_id');
     }
 }

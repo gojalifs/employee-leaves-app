@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\PermissionEnum;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -31,8 +32,15 @@ class HandleInertiaRequests extends Middleware
     {
         return [
             ...parent::share($request),
+            'flash' => [
+                'message' => fn() => $request->session()->get('message'),
+                'error'   => fn() => $request->session()->get('error'),
+            ],
             'auth' => [
-                'user' => $request->user(),
+                'user'  => $request->user(),
+                'can'   =>  $request->user() ? [
+                    'add_user'  =>  $request->user()->can(PermissionEnum::ADD_NEW_USERS),
+                ] : null,
             ],
         ];
     }

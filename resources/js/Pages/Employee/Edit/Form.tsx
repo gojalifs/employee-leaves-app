@@ -1,4 +1,3 @@
-import Checkbox from '@/Components/Checkbox';
 import {
     Form,
     FormControl,
@@ -15,6 +14,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { User } from '@/types';
 import { Department } from '@/types/department';
 import { Position } from '@/types/position';
 import { Role } from '@/types/roles';
@@ -32,40 +32,46 @@ const formSchema = z.object({
     department: z.string().nonempty(),
     position: z.string().nonempty(),
     address: z.string().nonempty(),
-    role: z.array(z.string()).refine((value) => value.some((item) => item), {
-        message: 'You have to select at least one item.',
-    }),
+    // role: z.string().nonempty(),
 });
 
-export default function AddForm({
+export default function EditForm({
     depts,
     positions,
     roles,
+    user,
 }: {
     depts: Department[];
     positions: Position[];
     roles: Role[];
+    user: User;
 }) {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            full_name: '',
-            email: '',
-            department: '',
-            position: '',
-            address: '',
-            role: [],
+            full_name: user.name ?? '',
+            email: user.email ?? '',
+            department: user.department.id.toString() ?? '',
+            position: user.position.id.toString() ?? '',
+            address: user.address ?? '',
+            // role: '',
         },
     });
 
     function onSubmit(data: z.infer<typeof formSchema>) {
-        console.log(data);
-        router.post(route('employee.store'), data, {
+        router.patch(route('employee.update', user.id), data, {
             preserveScroll: true,
             preserveState: true,
             onError: (e) => {
-                console.log('error ' + e.msg);
-                toast.error('Failed to add new employee');
+                toast.error(e.msg);
+            },
+            onSuccess: (props) => {
+                console.log(props);
+
+                // if (props.props.flash.success) {
+                //     toast.success(props.props.flash.success);
+                // }
+                // toast.info(props.props.success);
             },
         });
     }
@@ -205,76 +211,44 @@ export default function AddForm({
                             </FormItem>
                         )}
                     />
-
+                    {/* 
                     <FormField
                         control={form.control}
                         name="role"
-                        render={() => (
+                        render={({ field }) => (
                             <FormItem>
-                                <div className="mb-4">
-                                    <FormLabel className="text-base">
-                                        Roles
-                                    </FormLabel>
-                                    <FormDescription>
-                                        Select role(s) for this user
-                                    </FormDescription>
-                                </div>
-                                {roles.map((role) => (
-                                    <FormField
-                                        key={role.id}
-                                        control={form.control}
-                                        name="role"
-                                        render={({ field }) => {
-                                            return (
-                                                <FormItem
+                                <FormLabel htmlFor="role">Role</FormLabel>
+                                <FormControl>
+                                    <Select
+                                        value={field.value}
+                                        onValueChange={field.onChange}
+                                    >
+                                        <SelectTrigger className="w-full rounded-md border border-gray-500 px-4 py-2">
+                                            <SelectValue placeholder="Select Role" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {roles.map((role) => (
+                                                <SelectItem
                                                     key={role.id}
-                                                    className="flex flex-row items-start space-x-3 space-y-0"
+                                                    value={role.id.toString()}
                                                 >
-                                                    <FormControl>
-                                                        <Checkbox
-                                                            checked={field.value?.includes(
-                                                                role.name,
-                                                            )}
-                                                            onChange={(
-                                                                checked,
-                                                            ) => {
-                                                                return checked
-                                                                    ? field.onChange(
-                                                                          [
-                                                                              ...field.value,
-                                                                              role.name,
-                                                                          ],
-                                                                      )
-                                                                    : field.onChange(
-                                                                          field.value?.filter(
-                                                                              (
-                                                                                  value,
-                                                                              ) =>
-                                                                                  value !==
-                                                                                  role.name,
-                                                                          ),
-                                                                      );
-                                                            }}
-                                                        />
-                                                    </FormControl>
-                                                    <FormLabel className="text-sm font-normal">
-                                                        {role.name}
-                                                    </FormLabel>
-                                                </FormItem>
-                                            );
-                                        }}
-                                    />
-                                ))}
+                                                    {role.name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </FormControl>
+                                <FormDescription>User Position</FormDescription>
                                 <FormMessage />
                             </FormItem>
                         )}
-                    />
+                    /> */}
 
                     <Button
                         type="submit"
                         className="w-full rounded-md bg-blue-500 py-2 text-white hover:bg-blue-600"
                     >
-                        Add Employee
+                        Update Employee
                     </Button>
                 </form>
             </Form>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\RoleEnum;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,7 +13,8 @@ class UserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        if (Auth::user()->positions_id == 11) {
+        $user = Auth::user();
+        if (Auth::user()->positions_id == 11 || $user->hasRole([RoleEnum::HR])) {
             return true;
         }
 

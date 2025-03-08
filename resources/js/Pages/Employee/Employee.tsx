@@ -1,7 +1,8 @@
 import AppBar from '@/Layouts/AppBar';
 import MainLayout from '@/Layouts/MainLayout';
 import { User } from '@/types';
-import { Head, router } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
+import { toast } from 'sonner';
 import DataTable from '../../Components/Data-Table';
 import { columns } from './Columns';
 
@@ -13,7 +14,18 @@ interface EmployeeProps {
     links: Array<{ url: string | null; label: string; active: boolean }>;
 }
 
-export default function Employee({ users }: { users: User[] }) {
+export default function Employee({
+    users,
+    can,
+}: {
+    users: User[];
+    can: { can_add: string };
+}) {
+    const { flash } = usePage().props;
+    console.log(usePage().props);
+
+    flash.message && toast.info(flash.message);
+
     return (
         <MainLayout>
             <Head title="Employee" />
@@ -31,6 +43,7 @@ export default function Employee({ users }: { users: User[] }) {
                             data={users}
                             filterColumnName="email"
                             addDataButton={<AddUserButton />}
+                            can={can}
                         />
                     </div>
                 </div>

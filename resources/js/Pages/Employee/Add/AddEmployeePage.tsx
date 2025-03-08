@@ -2,18 +2,20 @@ import AppBar from '@/Layouts/AppBar';
 import MainLayout from '@/Layouts/MainLayout';
 import { Department } from '@/types/department';
 import { Position } from '@/types/position';
+import { Role } from '@/types/roles';
 import { Head, usePage } from '@inertiajs/react';
 import AddForm from './Form';
 
 export default function AddEmployeePage({
     depts,
     positions,
+    roles,
 }: {
     depts: Department[];
     positions: Position[];
+    roles: Role[];
 }) {
     const { errors } = usePage().props;
-    console.log(errors.msg);
 
     return (
         <MainLayout>
@@ -27,7 +29,11 @@ export default function AddEmployeePage({
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                             Employee Management
                         </div>
-                        <AddForm depts={depts} positions={positions} />
+                        <AddForm
+                            depts={depts}
+                            positions={positions}
+                            roles={roles}
+                        />
                     </div>
                 </div>
             </div>

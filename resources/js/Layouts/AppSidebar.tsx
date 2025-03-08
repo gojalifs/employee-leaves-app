@@ -10,16 +10,17 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import { usePage } from '@inertiajs/react';
 
 // Menu items.
 const hrManagement = [
     {
         title: 'Home',
-        url: 'dashboard',
+        url: '/dashboard',
     },
     {
         title: 'Employee',
-        url: 'employee',
+        url: '/employee',
     },
     {
         title: 'Department',
@@ -40,6 +41,10 @@ const workflowManagement = [
 
 export function AppSidebar() {
     const current = route().current();
+    const user = usePage().props.auth.user;
+    const can = usePage().props.auth.can;
+
+    console.log(can);
 
     return (
         <Sidebar>
@@ -53,16 +58,22 @@ export function AppSidebar() {
                     <SidebarGroupLabel>User Management</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
-                            {hrManagement.map((item, index) => (
-                                <SidebarMenuItem key={index}>
-                                    <SidebarMenuButton
-                                        asChild
-                                        isActive={current == item.url}
-                                    >
-                                        <a href={item.url}>{item.title}</a>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
-                            ))}
+                            {hrManagement.map(
+                                (item, index) =>
+                                    (item.title !== 'Employee' ||
+                                        can.add_user) && (
+                                        <SidebarMenuItem key={index}>
+                                            <SidebarMenuButton
+                                                asChild
+                                                isActive={current == item.url}
+                                            >
+                                                <a href={item.url}>
+                                                    {item.title}
+                                                </a>
+                                            </SidebarMenuButton>
+                                        </SidebarMenuItem>
+                                    ),
+                            )}
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
@@ -83,6 +94,7 @@ export function AppSidebar() {
             </SidebarContent>
             <SidebarFooter>
                 <SidebarMenu>
+                    <div>Welcome, {user.name}</div>
                     <SidebarMenuItem>
                         <SidebarMenuButton
                             asChild

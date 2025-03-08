@@ -1,5 +1,5 @@
-import { Department } from "./department";
-import { Position } from "./position";
+import { Department } from './department';
+import { Position } from './position';
 
 export interface User {
     id: number;
@@ -11,10 +11,19 @@ export interface User {
     email_verified_at?: string;
 }
 
+export interface Permission {
+    add_user: boolean;
+}
+
 export type PageProps<
     T extends Record<string, unknown> = Record<string, unknown>,
 > = T & {
     auth: {
         user: User;
+        can: Permission;
+    };
+    flash: {
+        message: string?;
+        error: string?;
     };
 };

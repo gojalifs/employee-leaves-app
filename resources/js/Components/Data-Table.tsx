@@ -32,9 +32,11 @@ export default function DataTable<TData, TValue>({
     data,
     filterColumnName,
     addDataButton: addDataButton,
+    can,
 }: DataTableProps<TData, TValue> & {
     filterColumnName: string;
     addDataButton: React.ReactNode;
+    can: { can_add: string };
 }) {
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] =
@@ -70,7 +72,7 @@ export default function DataTable<TData, TValue>({
                     className="max-w-sm"
                     id="search_field"
                 />
-                {addDataButton}
+                {can.can_add && addDataButton}
             </div>
             <Table className="w-full">
                 <TableHeader>
