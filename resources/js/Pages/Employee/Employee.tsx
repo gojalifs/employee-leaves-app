@@ -16,13 +16,11 @@ interface EmployeeProps {
 
 export default function Employee({
     users,
-    can,
 }: {
     users: User[];
     can: { can_add: string };
 }) {
     const { flash } = usePage().props;
-    console.log(usePage().props);
 
     flash.message && toast.info(flash.message);
 
@@ -43,7 +41,6 @@ export default function Employee({
                             data={users}
                             filterColumnName="email"
                             addDataButton={<AddUserButton />}
-                            can={can}
                         />
                     </div>
                 </div>

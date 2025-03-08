@@ -20,8 +20,8 @@ export type PageProps<
 > = T & {
     auth: {
         user: User;
-        can: Permission;
     };
+    can: Permission;
     flash: {
         message: string?;
         error: string?;

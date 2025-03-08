@@ -42,9 +42,7 @@ const workflowManagement = [
 export function AppSidebar() {
     const current = route().current();
     const user = usePage().props.auth.user;
-    const can = usePage().props.auth.can;
-
-    console.log(can);
+    const can = usePage().props.can;
 
     return (
         <Sidebar>
@@ -65,7 +63,13 @@ export function AppSidebar() {
                                         <SidebarMenuItem key={index}>
                                             <SidebarMenuButton
                                                 asChild
-                                                isActive={current == item.url}
+                                                isActive={
+                                                    current ==
+                                                    item.url
+                                                        .toLowerCase()
+                                                        .split('/')
+                                                        .pop()
+                                                }
                                             >
                                                 <a href={item.url}>
                                                     {item.title}

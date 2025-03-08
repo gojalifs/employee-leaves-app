@@ -36,12 +36,12 @@ class HandleInertiaRequests extends Middleware
                 'message' => fn() => $request->session()->get('message'),
                 'error'   => fn() => $request->session()->get('error'),
             ],
-            'auth' => [
+            'auth'  => [
                 'user'  => $request->user(),
-                'can'   =>  $request->user() ? [
-                    'add_user'  =>  $request->user()->can(PermissionEnum::ADD_NEW_USERS),
-                ] : null,
             ],
+            'can'   =>  $request->user() ? [
+                'add_user'  =>  $request->user()->can(PermissionEnum::ADD_NEW_USERS),
+            ] : null,
         ];
     }
 }
