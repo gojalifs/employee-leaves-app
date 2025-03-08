@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\RoleEnum;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
@@ -21,16 +22,15 @@ class UserSeeder extends Seeder
             'departments_id' => 1,
             'positions_id' => 11,
         ]);
-        $su->assignRole('staff');
+        $su->assignRole(RoleEnum::SUPER_ADMIN);
 
         $hr = User::create([
-            'name' => 'User One',
+            'name' => 'User HR One',
             'email' => 'hr@hris.local',
             'password' => Hash::make('password'),
             'departments_id' => 1,
             'positions_id' => 1,
         ]);
-        $hr->assignRole('staff');
-
+        $hr->assignRole(RoleEnum::HR);
     }
 }

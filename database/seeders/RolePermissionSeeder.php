@@ -25,6 +25,7 @@ class RolePermissionSeeder extends Seeder
             'managerial',
             'executive',
             RoleEnum::HR,
+            RoleEnum::SUPER_ADMIN,
         ];
 
         foreach ($roles as $role) {
@@ -62,6 +63,7 @@ class RolePermissionSeeder extends Seeder
             PermissionEnum::OVERRIDE_LEAVE_APPROVALS,
             PermissionEnum::ADD_NEW_USERS,
         ]);
+        Role::findByName(RoleEnum::SUPER_ADMIN->value)->givePermissionTo(Permission::all());
 
         DB::commit();
     }
