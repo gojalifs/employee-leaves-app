@@ -1,11 +1,12 @@
 <?php
 
-use App\Enums\PermissionEnum;
+use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Route;
+
+use App\Enums\RoleEnum;
 use App\Http\Controllers\DepartmentsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
@@ -35,15 +36,13 @@ Route::middleware('auth')->group(function () {
     Route::prefix('dept')->group(function () {
         Route::get('/', [DepartmentsController::class, 'index'])->name('dept');
 
-        Route::group(['middleware' => ['permission:' . PermissionEnum::ADD_NEW_USERS->value]], function () {
-            Route::get('add', [DepartmentsController::class, 'deptCreate'])->name('dept.add');
-
-            Route::post('add', [DepartmentsController::class, 'deptStore'])->name('dept.store');
+        Route::group(['middleware' => ['role:' . RoleEnum::SUPER_ADMIN->value . '|' . RoleEnum::HR->value]], function () {
+            Route::get('add', [DepartmentsController::class, 'create'])->name('dept.add');
+            Route::post('add', [DepartmentsController::class, 'store'])->name('dept.store');
+            Route::get('edit/{id}', [DepartmentsController::class, 'show'])->name('dept.show');
+            Route::patch('edit/{id}', [DepartmentsController::class, 'update'])->name('dept.update');
+            Route::delete('delete/{id}', [DepartmentsController::class, 'destroy'])->name('dept.destroy');
         });
-
-        Route::get('edit/{id}', [DepartmentsController::class, 'deptEdit'])->name('dept.edit');
-        Route::patch('edit/{id}', [DepartmentsController::class, 'deptUpdate'])->name('dept.update');
-        Route::delete('delete/{id}', [DepartmentsController::class, 'deptDestroy'])->name('dept.destroy');
     });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

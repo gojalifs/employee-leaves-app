@@ -24,7 +24,7 @@ const hrManagement = [
     },
     {
         title: 'Department',
-        url: '#',
+        url: '/dept',
     },
 ];
 

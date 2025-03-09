@@ -1,8 +1,11 @@
+import DataTable from '@/Components/Data-Table';
 import AppBar from '@/Layouts/AppBar';
 import MainLayout from '@/Layouts/MainLayout';
-import { Head } from '@inertiajs/react';
+import { Department } from '@/types/department';
+import { Head, router } from '@inertiajs/react';
+import { columns } from './Columns';
 
-export default function DepartmentPage() {
+export default function DepartmentPage({ depts }: { depts: Department[] }) {
     return (
         <MainLayout>
             <Head title="Departments" />
@@ -15,14 +18,26 @@ export default function DepartmentPage() {
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                             Department Management
                         </div>
-                        {/* <DataTable
+                        <DataTable
                             columns={columns}
-                            data={users}
-                            // links={users.links}
-                        /> */}
+                            data={depts}
+                            filterColumnName="name"
+                            addDataButton={AddDeptButton()}
+                        />
                     </div>
                 </div>
             </div>
         </MainLayout>
+    );
+}
+
+function AddDeptButton() {
+    return (
+        <button
+            onClick={() => router.visit(route('dept.add'))}
+            className="ml-4 rounded-md bg-blue-500 px-4 py-2 text-white"
+        >
+            Add New Department
+        </button>
     );
 }

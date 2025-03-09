@@ -70,7 +70,7 @@ export default function DataTable<TData, TValue>({
                             .getColumn(filterColumnName)
                             ?.setFilterValue(event.target.value)
                     }
-                    className="max-w-sm"
+                    className="max-w-sm capitalize"
                     id="search_field"
                 />
                 {can.add_user && addDataButton}
