@@ -29,7 +29,7 @@ export default function EditPage({
 
             <AppBar title="HRIS - Edit Employee Data" />
 
-            <div>
+            <div className="py-4">
                 <EditForm
                     depts={depts}
                     positions={positions}

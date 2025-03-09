@@ -1,3 +1,5 @@
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
     Form,
     FormControl,
@@ -18,7 +20,7 @@ import { User } from '@/types';
 import { Department } from '@/types/department';
 import { Position } from '@/types/position';
 import { Role } from '@/types/roles';
-import { Button, Input } from '@headlessui/react';
+import { Input } from '@headlessui/react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { router } from '@inertiajs/react';
@@ -32,7 +34,9 @@ const formSchema = z.object({
     department: z.string().nonempty(),
     position: z.string().nonempty(),
     address: z.string().nonempty(),
-    // role: z.string().nonempty(),
+    role: z.array(z.string()).refine((value) => value.some((item) => item), {
+        message: 'You have to select at least one item.',
+    }),
 });
 
 export default function EditForm({
@@ -54,7 +58,7 @@ export default function EditForm({
             department: user.department.id.toString() ?? '',
             position: user.position.id.toString() ?? '',
             address: user.address ?? '',
-            // role: '',
+            role: user.roles ? user.roles.map((role) => role?.name) : [],
         },
     });
 
@@ -65,20 +69,12 @@ export default function EditForm({
             onError: (e) => {
                 toast.error(e.msg);
             },
-            onSuccess: (props) => {
-                console.log(props);
-
-                // if (props.props.flash.success) {
-                //     toast.success(props.props.flash.success);
-                // }
-                // toast.info(props.props.success);
-            },
         });
     }
 
     return (
         <div className="mx-auto max-w-2xl rounded-lg bg-white p-6 shadow-md">
-            <h1 className="mb-6 text-2xl font-bold">Add New Employee</h1>
+            <h1 className="mb-6 text-2xl font-bold">Update Employee Data</h1>
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(onSubmit)}
@@ -211,47 +207,109 @@ export default function EditForm({
                             </FormItem>
                         )}
                     />
-                    {/* 
+
                     <FormField
                         control={form.control}
                         name="role"
-                        render={({ field }) => (
+                        render={() => (
                             <FormItem>
-                                <FormLabel htmlFor="role">Role</FormLabel>
-                                <FormControl>
-                                    <Select
-                                        value={field.value}
-                                        onValueChange={field.onChange}
-                                    >
-                                        <SelectTrigger className="w-full rounded-md border border-gray-500 px-4 py-2">
-                                            <SelectValue placeholder="Select Role" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {roles.map((role) => (
-                                                <SelectItem
-                                                    key={role.id}
-                                                    value={role.id.toString()}
+                                <div className="mb-4">
+                                    <FormLabel className="text-base">
+                                        Roles
+                                    </FormLabel>
+                                    <FormDescription>
+                                        Select the roles for this user
+                                    </FormDescription>
+                                </div>
+                                {roles.map((item) => (
+                                    <FormField
+                                        key={item.name}
+                                        control={form.control}
+                                        name="role"
+                                        render={({ field }) => {
+                                            return (
+                                                <FormItem
+                                                    key={item.name}
+                                                    className="flex flex-row items-start space-x-3 space-y-0"
                                                 >
-                                                    {role.name}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                </FormControl>
-                                <FormDescription>User Position</FormDescription>
+                                                    <FormControl>
+                                                        <Checkbox
+                                                            checked={field.value?.includes(
+                                                                item.name,
+                                                            )}
+                                                            onCheckedChange={(
+                                                                checked,
+                                                            ) => {
+                                                                return checked
+                                                                    ? field.onChange(
+                                                                          [
+                                                                              ...field.value,
+                                                                              item.name,
+                                                                          ],
+                                                                      )
+                                                                    : field.onChange(
+                                                                          field.value?.filter(
+                                                                              (
+                                                                                  value,
+                                                                              ) =>
+                                                                                  value !==
+                                                                                  item.name,
+                                                                          ),
+                                                                      );
+                                                            }}
+                                                        />
+                                                    </FormControl>
+                                                    <FormLabel className="text-sm font-normal">
+                                                        {item.name}
+                                                    </FormLabel>
+                                                </FormItem>
+                                            );
+                                        }}
+                                    />
+                                ))}
                                 <FormMessage />
                             </FormItem>
                         )}
-                    /> */}
+                    />
 
                     <Button
+                        variant={'default'}
                         type="submit"
-                        className="w-full rounded-md bg-blue-500 py-2 text-white hover:bg-blue-600"
+                        className="w-full"
                     >
                         Update Employee
                     </Button>
                 </form>
             </Form>
+
+            <Button
+                variant={'destructive'}
+                onClick={() => {
+                    if (
+                        confirm(
+                            'Are you sure you want to delete this employee?',
+                        )
+                    ) {
+                        router.delete(
+                            route('employee.destroy', { id: user.id }),
+                            {
+                                onSuccess: () => {
+                                    toast.success(
+                                        'Employee deleted successfully',
+                                    );
+                                },
+                                onError: (error) => {
+                                    toast.error('Failed to delete employee');
+                                    console.error(error);
+                                },
+                            },
+                        );
+                    }
+                }}
+                className="my-2 w-full"
+            >
+                Delete
+            </Button>
         </div>
     );
 }

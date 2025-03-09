@@ -78,6 +78,8 @@ class UserController extends Controller
             $depts = Departments::orderBy('name')->get();
             $positions = Positions::whereNot('id', 11)->orderBy('name')->get();
             $roles = Role::orderBy('name')->get();
+            $userRoles = $user->getRoleNames();
+            $user->roles = $userRoles;
 
             return Inertia::render('Employee/Edit/EditPage', [
                 'user'      => $user,
@@ -113,7 +115,9 @@ class UserController extends Controller
     {
         try {
             $user = User::findOrFail($id);
-            $user->softDeletes();
+            $user->delete();
+
+            return to_route('employee')->with('message', 'User deleted');
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             return back()->withErrors(['msg' => 'Failed to delete user!']);

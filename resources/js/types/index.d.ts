@@ -8,6 +8,7 @@ export interface User {
     position: Position;
     address: string;
     email: string;
+    roles: Role[]?;
     email_verified_at?: string;
 }
 
