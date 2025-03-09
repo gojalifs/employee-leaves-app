@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Enums\RoleEnum;
 use App\Http\Controllers\DepartmentsController;
+use App\Http\Controllers\LeavesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Inertia\Inertia;
@@ -36,14 +37,23 @@ Route::middleware('auth')->group(function () {
     Route::prefix('dept')->group(function () {
         Route::get('/', [DepartmentsController::class, 'index'])->name('dept');
 
-        Route::group(['middleware' => ['role:' . RoleEnum::SUPER_ADMIN->value . '|' . RoleEnum::HR->value]], function () {
+        // Route::group(['middleware' => ['role:' . RoleEnum::SUPER_ADMIN->value . '|' . RoleEnum::HR->value]], function () {
             Route::get('add', [DepartmentsController::class, 'create'])->name('dept.add');
             Route::post('add', [DepartmentsController::class, 'store'])->name('dept.store');
             Route::get('edit/{id}', [DepartmentsController::class, 'show'])->name('dept.show');
             Route::patch('edit/{id}', [DepartmentsController::class, 'update'])->name('dept.update');
             Route::delete('delete/{id}', [DepartmentsController::class, 'destroy'])->name('dept.destroy');
-        });
-    });
+        // });
+    })->middleware(['role:' . RoleEnum::SUPER_ADMIN->value . '|' . RoleEnum::HR->value]);
+
+    Route::prefix('leave')->group(function () {
+        Route::get('/', [LeavesController::class, 'index'])->name('leave');
+        Route::get('add', [LeavesController::class, 'create'])->name('leave.add');
+            Route::post('add', [LeavesController::class, 'store'])->name('leave.store');
+            Route::get('edit/{id}', [LeavesController::class, 'show'])->name('leave.show');
+            Route::patch('edit/{id}', [LeavesController::class, 'update'])->name('leave.update');
+            Route::delete('delete/{id}', [LeavesController::class, 'destroy'])->name('leave.destroy');
+    })->middleware(['role:' . RoleEnum::SUPER_ADMIN->value . '|' . RoleEnum::HR->value]);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

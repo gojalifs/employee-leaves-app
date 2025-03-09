@@ -31,7 +31,7 @@ const hrManagement = [
 const workflowManagement = [
     {
         title: 'Leave',
-        url: '#',
+        url: '/leave',
     },
     {
         title: 'Approval',
@@ -87,7 +87,16 @@ export function AppSidebar() {
                         <SidebarMenu>
                             {workflowManagement.map((item, index) => (
                                 <SidebarMenuItem key={index}>
-                                    <SidebarMenuButton asChild>
+                                    <SidebarMenuButton
+                                        asChild
+                                        isActive={
+                                            current ==
+                                            item.url
+                                                .toLowerCase()
+                                                .split('/')
+                                                .pop()
+                                        }
+                                    >
                                         <a href={item.url}>{item.title}</a>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
