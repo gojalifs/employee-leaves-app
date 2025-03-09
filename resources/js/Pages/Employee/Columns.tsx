@@ -1,16 +1,8 @@
 import { Button } from '@/components/ui/button';
 import { User } from '@/types';
 import { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown, MoreHorizontal } from 'lucide-react';
+import { ArrowUpDown, FilePenLine } from 'lucide-react';
 
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { router } from '@inertiajs/react';
 
 export const columns: ColumnDef<User>[] = [
@@ -70,25 +62,15 @@ export const columns: ColumnDef<User>[] = [
         cell: ({ row }) => {
             const user = row.original as User;
             return (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost">
-                            <MoreHorizontal />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem
-                            onClick={() =>
-                                router.visit(route('employee.show', user.id))
-                            }
-                        >
-                            Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>Delete</DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <Button
+                    variant="ghost"
+                    onClick={() =>
+                        router.visit(route('employee.show', user.id))
+                    }
+                >
+                    <FilePenLine className="mr-2" />
+                    Edit
+                </Button>
             );
         },
     },

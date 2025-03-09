@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/table';
 
 import { Input } from '@/components/ui/input';
+import { usePage } from '@inertiajs/react';
 import React from 'react';
 
 interface DataTableProps<TData, TValue> {
@@ -32,12 +33,12 @@ export default function DataTable<TData, TValue>({
     data,
     filterColumnName,
     addDataButton: addDataButton,
-    can,
 }: DataTableProps<TData, TValue> & {
     filterColumnName: string;
     addDataButton: React.ReactNode;
-    can: { can_add: string };
 }) {
+    const { can } = usePage().props;
+
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] =
         React.useState<ColumnFiltersState>([]);
@@ -72,7 +73,7 @@ export default function DataTable<TData, TValue>({
                     className="max-w-sm"
                     id="search_field"
                 />
-                {can.can_add && addDataButton}
+                {can.add_user && addDataButton}
             </div>
             <Table className="w-full">
                 <TableHeader>

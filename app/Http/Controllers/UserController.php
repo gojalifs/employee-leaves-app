@@ -34,7 +34,6 @@ class UserController extends Controller
 
         return Inertia::render('Employee/Employee', [
             'users'     => $users,
-            'can'       => ['can_add' => request()->user()->hasRole(RoleEnum::HR)],
             'message'   => 'Employee added successfully '
         ])->with('message', 'Employee added successfully');
     }
@@ -103,10 +102,21 @@ class UserController extends Controller
             $user->positions_id = $request->position;
             $user->save();
 
-            return to_route('employee.show', $id)->with('message', 'Success update user data');
+            return to_route('employee', $id)->with('message', 'Success update user data');
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             return back()->withErrors(['msg' => 'Failed to update data']);
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $user = User::findOrFail($id);
+            $user->softDeletes();
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            return back()->withErrors(['msg' => 'Failed to delete user!']);
         }
     }
 
@@ -142,12 +152,12 @@ class UserController extends Controller
         try {
             $user = $request->user();
 
-            // $user->assignRole(RoleEnum::HR);
-            // Role::findBYName(RoleEnum::HR->value)->givePermissionTo(PermissionEnum::ADD_NEW_USERS);
+            // $user->assignRole(RoleEnum::SUPER_ADMIN);
+            // Role::findBYName(RoleEnum::SUPER_ADMIN->value)->givePermissionTo(Permission::all());
             // $role = Role::findByName(RoleEnum::HR->value);
             return response()->json([
                 'msg' => 'Role assigned successfully',
-                'role' => $user->hasAnyRole([RoleEnum::HR]),
+                'role' => $user->hasAnyRole([RoleEnum::HR, RoleEnum::SUPER_ADMIN]),
                 'permission' => $user->hasPermissionTo(PermissionEnum::ADD_NEW_USERS->value),
             ]);
 
