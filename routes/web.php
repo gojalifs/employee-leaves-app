@@ -2,13 +2,14 @@
 
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 use App\Enums\RoleEnum;
+use App\Http\Controllers\ApprovalLevelsController;
 use App\Http\Controllers\DepartmentsController;
 use App\Http\Controllers\LeavesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
-use Inertia\Inertia;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -53,6 +54,15 @@ Route::middleware('auth')->group(function () {
             Route::get('edit/{id}', [LeavesController::class, 'show'])->name('leave.show');
             Route::patch('edit/{id}', [LeavesController::class, 'update'])->name('leave.update');
             Route::delete('delete/{id}', [LeavesController::class, 'destroy'])->name('leave.destroy');
+    })->middleware(['role:' . RoleEnum::SUPER_ADMIN->value . '|' . RoleEnum::HR->value]);
+
+    Route::prefix('approval')->group(function () {
+        Route::get('/', [ApprovalLevelsController::class, 'index'])->name('approval');
+        Route::get('add', [ApprovalLevelsController::class, 'create'])->name('approval.add');
+            Route::post('add', [ApprovalLevelsController::class, 'store'])->name('approval.store');
+            Route::get('edit/{id}', [ApprovalLevelsController::class, 'show'])->name('approval.show');
+            Route::patch('edit/{id}', [ApprovalLevelsController::class, 'update'])->name('approval.update');
+            Route::delete('delete/{id}', [ApprovalLevelsController::class, 'destroy'])->name('approval.destroy');
     })->middleware(['role:' . RoleEnum::SUPER_ADMIN->value . '|' . RoleEnum::HR->value]);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -35,7 +35,7 @@ const workflowManagement = [
     },
     {
         title: 'Approval',
-        url: '#',
+        url: '/approval',
     },
 ];
 
