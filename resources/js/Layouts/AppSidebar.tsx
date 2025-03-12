@@ -26,6 +26,10 @@ const hrManagement = [
         title: 'Department',
         url: '/dept',
     },
+    {
+        title: 'Position',
+        url: '/position',
+    },
 ];
 
 const workflowManagement = [

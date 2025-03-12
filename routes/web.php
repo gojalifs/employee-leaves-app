@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PositionsController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -39,31 +40,35 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [DepartmentsController::class, 'index'])->name('dept');
 
         // Route::group(['middleware' => ['role:' . RoleEnum::SUPER_ADMIN->value . '|' . RoleEnum::HR->value]], function () {
-            Route::get('add', [DepartmentsController::class, 'create'])->name('dept.add');
-            Route::post('add', [DepartmentsController::class, 'store'])->name('dept.store');
-            Route::get('edit/{id}', [DepartmentsController::class, 'show'])->name('dept.show');
-            Route::patch('edit/{id}', [DepartmentsController::class, 'update'])->name('dept.update');
-            Route::delete('delete/{id}', [DepartmentsController::class, 'destroy'])->name('dept.destroy');
+        Route::get('add', [DepartmentsController::class, 'create'])->name('dept.add');
+        Route::post('add', [DepartmentsController::class, 'store'])->name('dept.store');
+        Route::get('edit/{id}', [DepartmentsController::class, 'show'])->name('dept.show');
+        Route::patch('edit/{id}', [DepartmentsController::class, 'update'])->name('dept.update');
+        Route::delete('delete/{id}', [DepartmentsController::class, 'destroy'])->name('dept.destroy');
         // });
     })->middleware(['role:' . RoleEnum::SUPER_ADMIN->value . '|' . RoleEnum::HR->value]);
 
     Route::prefix('leave')->group(function () {
         Route::get('/', [LeavesController::class, 'index'])->name('leave');
         Route::get('add', [LeavesController::class, 'create'])->name('leave.add');
-            Route::post('add', [LeavesController::class, 'store'])->name('leave.store');
-            Route::get('edit/{id}', [LeavesController::class, 'show'])->name('leave.show');
-            Route::patch('edit/{id}', [LeavesController::class, 'update'])->name('leave.update');
-            Route::delete('delete/{id}', [LeavesController::class, 'destroy'])->name('leave.destroy');
+        Route::post('add', [LeavesController::class, 'store'])->name('leave.store');
+        Route::get('edit/{id}', [LeavesController::class, 'show'])->name('leave.show');
+        Route::patch('edit/{id}', [LeavesController::class, 'update'])->name('leave.update');
+        Route::delete('delete/{id}', [LeavesController::class, 'destroy'])->name('leave.destroy');
     })->middleware(['role:' . RoleEnum::SUPER_ADMIN->value . '|' . RoleEnum::HR->value]);
 
     Route::prefix('approval')->group(function () {
         Route::get('/', [ApprovalLevelsController::class, 'index'])->name('approval');
         Route::get('add', [ApprovalLevelsController::class, 'create'])->name('approval.add');
-            Route::post('add', [ApprovalLevelsController::class, 'store'])->name('approval.store');
-            Route::get('edit/{id}', [ApprovalLevelsController::class, 'show'])->name('approval.show');
-            Route::patch('edit/{id}', [ApprovalLevelsController::class, 'update'])->name('approval.update');
-            Route::delete('delete/{id}', [ApprovalLevelsController::class, 'destroy'])->name('approval.destroy');
+        Route::post('add', [ApprovalLevelsController::class, 'store'])->name('approval.store');
+        Route::get('edit/{id}', [ApprovalLevelsController::class, 'show'])->name('approval.show');
+        Route::patch('edit/{id}', [ApprovalLevelsController::class, 'update'])->name('approval.update');
+        Route::delete('delete/{id}', [ApprovalLevelsController::class, 'destroy'])->name('approval.destroy');
     })->middleware(['role:' . RoleEnum::SUPER_ADMIN->value . '|' . RoleEnum::HR->value]);
+
+    Route::prefix('position')->group(function () {
+        Route::get('/', [PositionsController::class, 'index'])->name('position');
+    });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
