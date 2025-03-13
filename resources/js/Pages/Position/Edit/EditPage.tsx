@@ -1,23 +1,23 @@
 import AppBar from '@/Layouts/AppBar';
 import MainLayout from '@/Layouts/MainLayout';
-import { Leave } from '@/types/leave';
 import { Head, usePage } from '@inertiajs/react';
 import { toast } from 'sonner';
 import EditForm from './Form';
+import { Position } from "@/types/position";
 
-export default function EditPage({ leave }: { leave: Leave }) {
+export default function EditPage({ position }: { position: Position }) {
     const { flash } = usePage().props;
 
     flash.message && toast.info(flash.message);
 
     return (
         <MainLayout>
-            <Head title="Leave Type" />
+            <Head title="Position" />
 
-            <AppBar title="HRIS - Edit Leave Type Data" />
+            <AppBar title="HRIS - Edit Position Data" />
 
             <div className="py-4">
-                <EditForm leave={leave} />
+                <EditForm position={position} />
             </div>
         </MainLayout>
     );

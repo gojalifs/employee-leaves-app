@@ -68,6 +68,11 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('position')->group(function () {
         Route::get('/', [PositionsController::class, 'index'])->name('position');
+        Route::get('edit/{id}', [PositionsController::class, 'show'])->name('position.show');
+        Route::get('create', [PositionsController::class, 'create'])->name('position.create');
+        Route::post('create', [PositionsController::class, 'store'])->name('position.store');
+        Route::patch('edit/{id}', [PositionsController::class, 'update'])->name('position.update');
+        Route::delete('delete/{id}', [PositionsController::class, 'destroy'])->name('position.destroy');
     });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

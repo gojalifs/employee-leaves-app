@@ -34,7 +34,7 @@ export default function PositionPage({ positions }: { positions: Position[] }) {
 function AddPositionButton() {
     return (
         <button
-            onClick={() => router.visit(route('position.add'))}
+            onClick={() => router.visit(route('position.create'))}
             className="ml-4 rounded-md bg-blue-500 px-4 py-2 text-white"
         >
             Add New Position

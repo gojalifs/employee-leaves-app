@@ -8,31 +8,25 @@ import {
     FormLabel,
     FormMessage,
 } from '@/components/ui/form';
-import { Leave } from '@/types/leave';
 import { Input } from '@headlessui/react';
 
+import { Position } from '@/types/position';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { router } from '@inertiajs/react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-const formSchema = z.object({
-    leave_name: z.string().nonempty(),
-    max_quantity: z.string().nonempty(),
-});
+const formSchema = z.object({ position_name: z.string().nonempty() });
 
-export default function EditForm({ leave }: { leave: Leave }) {
+export default function EditForm({ position }: { position: Position }) {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        defaultValues: {
-            leave_name: leave.name ?? '',
-            max_quantity: leave.max_quantity?.toString(),
-        },
+        defaultValues: { position_name: position.name ?? '' },
     });
 
     function onSubmit(data: z.infer<typeof formSchema>) {
-        router.patch(route('leave.update', leave.id), data, {
+        router.patch(route('position.update', position.id), data, {
             preserveScroll: true,
             preserveState: true,
             onError: (e) => {
@@ -51,52 +45,21 @@ export default function EditForm({ leave }: { leave: Leave }) {
                 >
                     <FormField
                         control={form.control}
-                        name="leave_name"
+                        name="position_name"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel htmlFor="leave_name">Name</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        {...field}
-                                        placeholder="Leave Type Name"
-                                        className="w-full rounded-md border px-4 py-2"
-                                        autoFocus
-                                    />
-                                </FormControl>
-                                <FormDescription>
-                                    Leave Type Name
-                                </FormDescription>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-
-                    <FormField
-                        control={form.control}
-                        name="max_quantity"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel htmlFor="max_quantity">
-                                    Quota in a year
+                                <FormLabel htmlFor="position_name">
+                                    Name
                                 </FormLabel>
                                 <FormControl>
                                     <Input
                                         {...field}
-                                        placeholder="e.g 12"
+                                        placeholder="Position Name"
                                         className="w-full rounded-md border px-4 py-2"
-                                        onInput={(e) => {
-                                            const target =
-                                                e.target as HTMLInputElement;
-                                            target.value = target.value.replace(
-                                                /\D/g,
-                                                '',
-                                            );
-                                        }}
+                                        autoFocus
                                     />
                                 </FormControl>
-                                <FormDescription>
-                                    Quota in a year
-                                </FormDescription>
+                                <FormDescription>Position Name</FormDescription>
                                 <FormMessage />
                             </FormItem>
                         )}
@@ -107,7 +70,7 @@ export default function EditForm({ leave }: { leave: Leave }) {
                         type="submit"
                         className="w-full"
                     >
-                        Update Leave Type
+                        Update Position
                     </Button>
                 </form>
             </Form>
@@ -117,19 +80,21 @@ export default function EditForm({ leave }: { leave: Leave }) {
                 onClick={() => {
                     if (
                         confirm(
-                            'Are you sure you want to delete this Leave Type?',
+                            'Are you sure you want to delete this Position?',
                         )
                     ) {
                         router.delete(
-                            route('leave.destroy', { id: leave.id }),
+                            route('position.destroy', { id: position.id }),
                             {
                                 onSuccess: () => {
                                     toast.success(
-                                        'Leave type deleted successfully',
+                                        'Position type deleted successfully',
                                     );
                                 },
                                 onError: (error) => {
-                                    toast.error('Failed to delete leave type');
+                                    toast.error(
+                                        'Failed to delete position type',
+                                    );
                                     console.error(error);
                                 },
                             },
