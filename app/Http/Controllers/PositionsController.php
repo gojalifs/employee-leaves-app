@@ -15,7 +15,7 @@ class PositionsController extends Controller
     public function index(): Response|RedirectResponse
     {
         try {
-            $positions = Positions::all();
+            $positions = Positions::where('name', '!=', 'super_admin')->get();
 
             return Inertia::render('Position/Index', [
                 'positions' => $positions,
