@@ -6,10 +6,13 @@ use App\Enums\PermissionEnum;
 use App\Enums\RoleEnum;
 use App\Http\Requests\UserRequest;
 use App\Models\Departments;
+use App\Models\Leaves;
 use App\Models\Positions;
 use App\Models\User;
+use App\Models\UserLeaves;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -33,8 +36,8 @@ class UserController extends Controller
             ->get();
 
         return Inertia::render('Employee/Employee', [
-            'users'     => $users,
-            'message'   => 'Employee added successfully '
+            'users' => $users,
+            'message' => 'Employee added successfully '
         ])->with('message', 'Employee added successfully');
     }
 
@@ -45,9 +48,9 @@ class UserController extends Controller
         $roles = Role::orderBy('name')->get();
 
         return Inertia::render('Employee/Add/AddEmployeePage', [
-            'depts'     => $depts,
+            'depts' => $depts,
             'positions' => $positions,
-            'roles'     => $roles,
+            'roles' => $roles,
         ]);
     }
 
@@ -55,11 +58,11 @@ class UserController extends Controller
     {
         try {
             $user = new User();
-            $user->name             = $request->full_name;
-            $user->email            = $request->email;
-            $user->departments_id   = $request->department;
-            $user->positions_id     = $request->position;
-            $user->address          = $request->address;
+            $user->name = $request->full_name;
+            $user->email = $request->email;
+            $user->departments_id = $request->department;
+            $user->positions_id = $request->position;
+            $user->address = $request->address;
             $user->save();
 
             $user->assignRole($request->role);
@@ -82,10 +85,11 @@ class UserController extends Controller
             $user->roles = $userRoles;
 
             return Inertia::render('Employee/Edit/EditPage', [
-                'user'      => $user,
-                'depts'     => $depts,
+                'user' => $user,
+                'depts' => $depts,
                 'positions' => $positions,
-                'roles'     => $roles,
+                'roles' => $roles,
+
             ]);
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
@@ -96,13 +100,23 @@ class UserController extends Controller
     public function update(UserRequest $request, $id)
     {
         try {
-            $user = User::findOrFail($id);
-            $user->email = $request->email;
-            $user->name = $request->full_name;
-            $user->address = $request->address;
-            $user->departments_id = $request->department;
-            $user->positions_id = $request->position;
-            $user->save();
+            DB::transaction(function () use ($request, $id) {
+//                $roles = [];
+//                array_map(function ($role) {
+//                    $roles[] = Role::findByName($role);
+//                }, $request->role);
+
+                $user = User::findOrFail($id);
+                $user->email = $request->email;
+                $user->name = $request->full_name;
+                $user->address = $request->address;
+                $user->departments_id = $request->department;
+                $user->positions_id = $request->position;
+                $user->save();
+
+//                dd($roles);
+                $user->assignRole($request->role);
+            });
 
             return to_route('employee', $id)->with('message', 'Success update user data');
         } catch (\Throwable $th) {
@@ -133,7 +147,7 @@ class UserController extends Controller
     {
         try {
             $rules = [
-                'password'  => 'required|min:8|confirmed',
+                'password' => 'required|min:8|confirmed',
             ];
             $request->validate($rules);
 

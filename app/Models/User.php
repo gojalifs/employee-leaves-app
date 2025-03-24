@@ -3,12 +3,19 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
+/**
+ * Represents the Positions model in the application.
+ * Includes factory and soft delete capabilities.
+ * Manages the 'name' attribute as a fillable property.
+ * @mixin Builder
+ */
 class User extends Authenticatable
 {
     /**

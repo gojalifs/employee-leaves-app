@@ -13,11 +13,22 @@ import {
 import { usePage } from '@inertiajs/react';
 
 // Menu items.
-const hrManagement = [
+const leavePermit = [
     {
         title: 'Home',
         url: '/dashboard',
     },
+    {
+        title: 'Leave Request',
+        url: '/request',
+    },
+    {
+        title: 'Approval',
+        url: '/approval',
+    },
+];
+
+const hrManagement = [
     {
         title: 'Employee',
         url: '/employee',
@@ -30,6 +41,10 @@ const hrManagement = [
         title: 'Position',
         url: '/position',
     },
+    {
+        title: 'Employee Leave',
+        url: '/employee-leave',
+    }
 ];
 
 const workflowManagement = [
@@ -56,6 +71,29 @@ export function AppSidebar() {
                 </span>
             </SidebarHeader>
             <SidebarContent>
+                <SidebarGroup>
+                    <SidebarGroupLabel>Leave Permit</SidebarGroupLabel>
+                    <SidebarGroupContent>
+                        <SidebarMenu>
+                            {leavePermit.map((item, index) => (
+                                <SidebarMenuItem key={index}>
+                                    <SidebarMenuButton
+                                        asChild
+                                        isActive={
+                                            current ==
+                                            item.url
+                                                .toLowerCase()
+                                                .split('/')
+                                                .pop()
+                                        }
+                                    >
+                                        <a href={item.url}>{item.title}</a>
+                                    </SidebarMenuButton>
+                                </SidebarMenuItem>
+                            ))}
+                        </SidebarMenu>
+                    </SidebarGroupContent>
+                </SidebarGroup>
                 <SidebarGroup>
                     <SidebarGroupLabel>User Management</SidebarGroupLabel>
                     <SidebarGroupContent>

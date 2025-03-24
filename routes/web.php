@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\LeaveHistoryController;
 use App\Http\Controllers\PositionsController;
+use App\Http\Controllers\UserLeavesController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -74,6 +76,9 @@ Route::middleware('auth')->group(function () {
         Route::patch('edit/{id}', [PositionsController::class, 'update'])->name('position.update');
         Route::delete('delete/{id}', [PositionsController::class, 'destroy'])->name('position.destroy');
     });
+
+    Route::resource('employee-leave', UserLeavesController::class);
+    Route::resource('request', LeaveHistoryController::class);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

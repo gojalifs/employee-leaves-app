@@ -1,5 +1,7 @@
 export interface Leave {
     id: number;
-    name: string?;
-    max_quantity: number?;
+    name: string | null;
+    max_quantity: number | null;
+    unit: string | null;
+    period: string | null;
 }

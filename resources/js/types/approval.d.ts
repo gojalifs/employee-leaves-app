@@ -3,13 +3,13 @@ import { Position } from './position';
 
 export interface Approval {
     id: number;
-    departments_id: number?;
-    department: Department?;
-    requester_position_id: number?;
-    requester_position: Position?;
-    level: number?;
-    positions_id: number?;
-    position: Position?;
-    next_level_id: number?;
-    next_approval: Approval?;
+    departments_id: number | null;
+    department: Department | null;
+    requester_position_id: number | null;
+    requester_position: Position | null;
+    level: number | null;
+    positions_id: number | null;
+    position: Position | null;
+    next_level_id: number | null;
+    next_approval: Approval | null;
 }

@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->integer('max_quantity');
-            $table->string('unit')->default('day');
+            $table->string('unit')->default('work day')->nullable();
+            $table->string('period')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

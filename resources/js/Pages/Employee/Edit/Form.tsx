@@ -22,6 +22,7 @@ import { Position } from '@/types/position';
 import { Role } from '@/types/roles';
 import { Input } from '@headlessui/react';
 
+import { Leave } from '@/types/leave';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { router } from '@inertiajs/react';
 import { useForm } from 'react-hook-form';
