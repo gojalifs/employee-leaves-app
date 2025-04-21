@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer('max_quantity');
             $table->string('unit')->default('work day')->nullable();
             $table->string('period')->nullable();
+            $table->unsignedTinyInteger('fix_duration')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

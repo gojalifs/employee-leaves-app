@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignIdFor(Leaves::class)->constrained()->cascadeOnUpdate()->restrictOnDelete();
             $table->date('start_date');
             $table->date('end_date');
-            $table->string('status');
+            $table->string('status')->default('pending');
             $table->text('reason');
             $table->text('note')->nullable();
             $table->timestamps();

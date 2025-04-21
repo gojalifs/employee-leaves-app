@@ -115,7 +115,7 @@ class UserController extends Controller
                 $user->save();
 
 //                dd($roles);
-                $user->assignRole($request->role);
+                $user->syncRoles($request->role);
             });
 
             return to_route('employee', $id)->with('message', 'Success update user data');

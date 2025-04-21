@@ -23,8 +23,18 @@ export type PageProps<
         user: User;
     };
     can: Permission;
+    sidebar: {
+        leave_permit: SidebarMenu[];
+        hr_management: SidebarMenu[];
+        workflow_management: SidebarMenu[];
+    };
     flash: {
         message: string?;
         error: string?;
     };
 };
+
+interface SidebarMenu {
+    title: string;
+    url: string;
+}

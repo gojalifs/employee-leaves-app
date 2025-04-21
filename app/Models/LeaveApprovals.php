@@ -17,4 +17,9 @@ class LeaveApprovals extends Model
         'status',
         'comment',
     ];
+
+    public function approval_level()
+    {
+        return $this->belongsTo(ApprovalLevels::class, 'approval_level_id');
+    }
 }

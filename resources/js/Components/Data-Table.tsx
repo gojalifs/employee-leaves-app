@@ -74,7 +74,7 @@ export default function DataTable<TData, TValue>({
                     className="max-w-sm capitalize"
                     id="search_field"
                 />
-                {can.add_user && addDataButton}
+                {addDataButton}
             </div>
             <div>
                 <Table className="w-full">

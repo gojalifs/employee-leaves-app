@@ -12,56 +12,10 @@ import {
 } from '@/components/ui/sidebar';
 import { usePage } from '@inertiajs/react';
 
-// Menu items.
-const leavePermit = [
-    {
-        title: 'Home',
-        url: '/dashboard',
-    },
-    {
-        title: 'Leave Request',
-        url: '/request',
-    },
-    {
-        title: 'Approval',
-        url: '/approval',
-    },
-];
-
-const hrManagement = [
-    {
-        title: 'Employee',
-        url: '/employee',
-    },
-    {
-        title: 'Department',
-        url: '/dept',
-    },
-    {
-        title: 'Position',
-        url: '/position',
-    },
-    {
-        title: 'Employee Leave',
-        url: '/employee-leave',
-    }
-];
-
-const workflowManagement = [
-    {
-        title: 'Leave',
-        url: '/leave',
-    },
-    {
-        title: 'Approval',
-        url: '/approval',
-    },
-];
-
 export function AppSidebar() {
     const current = route().current();
     const user = usePage().props.auth.user;
-    const can = usePage().props.can;
+    const sidebar = usePage().props.sidebar;
 
     return (
         <Sidebar>
@@ -75,7 +29,7 @@ export function AppSidebar() {
                     <SidebarGroupLabel>Leave Permit</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
-                            {leavePermit.map((item, index) => (
+                            {sidebar.leave_permit.map((item, index) => (
                                 <SidebarMenuItem key={index}>
                                     <SidebarMenuButton
                                         asChild
@@ -94,14 +48,40 @@ export function AppSidebar() {
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
-                <SidebarGroup>
-                    <SidebarGroupLabel>User Management</SidebarGroupLabel>
-                    <SidebarGroupContent>
-                        <SidebarMenu>
-                            {hrManagement.map(
-                                (item, index) =>
-                                    (item.title !== 'Employee' ||
-                                        can.add_user) && (
+                {sidebar.hr_management.length > 0 && (
+                    <SidebarGroup>
+                        <SidebarGroupLabel>User Management</SidebarGroupLabel>
+                        <SidebarGroupContent>
+                            <SidebarMenu>
+                                {sidebar.hr_management.map((item, index) => (
+                                    <SidebarMenuItem key={index}>
+                                        <SidebarMenuButton
+                                            asChild
+                                            isActive={
+                                                current ==
+                                                item.url
+                                                    .toLowerCase()
+                                                    .split('/')
+                                                    .pop()
+                                            }
+                                        >
+                                            <a href={item.url}>{item.title}</a>
+                                        </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                ))}
+                            </SidebarMenu>
+                        </SidebarGroupContent>
+                    </SidebarGroup>
+                )}
+                {sidebar.workflow_management.length > 0 && (
+                    <SidebarGroup>
+                        <SidebarGroupLabel>
+                            Workflow Management{' '}
+                        </SidebarGroupLabel>
+                        <SidebarGroupContent>
+                            <SidebarMenu>
+                                {sidebar.workflow_management.map(
+                                    (item, index) => (
                                         <SidebarMenuItem key={index}>
                                             <SidebarMenuButton
                                                 asChild
@@ -119,33 +99,11 @@ export function AppSidebar() {
                                             </SidebarMenuButton>
                                         </SidebarMenuItem>
                                     ),
-                            )}
-                        </SidebarMenu>
-                    </SidebarGroupContent>
-                </SidebarGroup>
-                <SidebarGroup>
-                    <SidebarGroupLabel>Workflow Management </SidebarGroupLabel>
-                    <SidebarGroupContent>
-                        <SidebarMenu>
-                            {workflowManagement.map((item, index) => (
-                                <SidebarMenuItem key={index}>
-                                    <SidebarMenuButton
-                                        asChild
-                                        isActive={
-                                            current ==
-                                            item.url
-                                                .toLowerCase()
-                                                .split('/')
-                                                .pop()
-                                        }
-                                    >
-                                        <a href={item.url}>{item.title}</a>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
-                            ))}
-                        </SidebarMenu>
-                    </SidebarGroupContent>
-                </SidebarGroup>
+                                )}
+                            </SidebarMenu>
+                        </SidebarGroupContent>
+                    </SidebarGroup>
+                )}
             </SidebarContent>
             <SidebarFooter>
                 <SidebarMenu>

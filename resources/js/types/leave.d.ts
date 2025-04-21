@@ -4,4 +4,5 @@ export interface Leave {
     max_quantity: number | null;
     unit: string | null;
     period: string | null;
+    fix_duration: integer;
 }
