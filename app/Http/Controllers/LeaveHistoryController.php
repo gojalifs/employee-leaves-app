@@ -25,11 +25,19 @@ class LeaveHistoryController extends Controller
 
             // Get all user requests
             // with leave type and user details
-            $leaveRequest = LeaveHistory::where('user_id', $user->id)
-                ->with(['leaveType', 'user'])
+            $leaveRequest = LeaveHistory::with([
+                'user',
+                'leaveType',
+                'leaveApprovals' => function ($query) {
+                    $query->orderByDesc('created_at')->first();
+                },
+                'leaveApprovals.approver',
+                'leaveApprovals.approval_level.next_approval',
+                'leaveApprovals.approval_level.next_approval.position',
+            ])
+                ->where('user_id', $user->id)
                 ->orderBy('created_at', 'desc')
                 ->get();
-
             return Inertia::render('Request/Index', ['requests' => $leaveRequest]);
         } catch (\Throwable $th) {
             // Log the error message

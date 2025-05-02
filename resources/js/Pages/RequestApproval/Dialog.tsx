@@ -94,6 +94,28 @@ export default function ConfirmDialog({
                             onClick={() => {
                                 // Handle decline action
                                 console.log('Declined:', rowData);
+                                router.patch(
+                                    route(
+                                        'request_approval.update',
+                                        rowData?.id,
+                                    ),
+                                    { status: 'rejected' },
+                                    {
+                                        onSuccess: () => {
+                                            toast.success(
+                                                'Leave request rejected successfully',
+                                            );
+
+                                            router.reload();
+                                        },
+                                        onError: () => {
+                                            toast.error(
+                                                'Failed to reject leave request',
+                                            );
+                                        },
+                                    },
+                                );
+
                                 onOpenChange(false);
                             }}
                         >

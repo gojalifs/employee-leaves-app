@@ -1,5 +1,6 @@
 import { User } from '.';
 import { Leave } from './leave';
+import { LeaveApproval } from './leave_approval';
 
 export interface Request {
     id: number;
@@ -12,5 +13,6 @@ export interface Request {
     reason: string;
     note: string;
     created_at: string;
+    leave_approvals: LeaveApproval[] | undefined;
     user: User;
 }

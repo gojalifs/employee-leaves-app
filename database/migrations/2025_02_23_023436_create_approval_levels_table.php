@@ -18,7 +18,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Departments::class)->constrained()->cascadeOnUpdate()->restrictOnDelete();
             $table->unsignedBigInteger('requester_position_id')->nullable();
-            $table->foreign('requester_position')->references('id')->on('positions')->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreign('requester_position_id')->references('id')->on('positions')->cascadeOnUpdate()->restrictOnDelete();
             $table->unsignedInteger('level');
             $table->foreignIdFor(Positions::class)->constrained()->cascadeOnUpdate()->restrictOnDelete();
             $table->foreignIdFor(ApprovalLevels::class, 'next_level_id')->nullable()->constrained()->cascadeOnUpdate()->restrictOnDelete();

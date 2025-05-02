@@ -80,11 +80,11 @@ class LeaveHistoryPolicy
         /* 
             Get leave approvals by history id
         */
-        $approval = LeaveApprovals::with(['approval'])
+        $approval = LeaveApprovals::with(['approval_level'])
             ->where('leave_history_id', $leaveHistory->id)
             ->orderByDesc('created_at')
             ->first();
-            
+
         /* 
             If approval is not found, check for the first approval,
             else check the next approval user
@@ -106,12 +106,14 @@ class LeaveHistoryPolicy
             // Return true because current user is the first approver
             return true;
         } else {
-            $nextApproval = $approval->approval->next_approval;
+            $nextApproval = $approval->approval_level->next_approval ?? null;
+            // dd($approval->toArray(), $nextApproval->toArray(), $user->toArray());
 
             // If user position is next approval, return true
             if (
-                $user->positions_id === $nextApproval->positions_id &&
-                $user->departments_id === $nextApproval->departments_id
+                isset($nextApproval) && isset($nextApproval) && (
+                    $user->positions_id === $nextApproval->positions_id &&
+                    $user->departments_id === $nextApproval->departments_id)
             ) {
                 return true;
             }

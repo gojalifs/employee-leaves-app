@@ -101,10 +101,6 @@ class UserController extends Controller
     {
         try {
             DB::transaction(function () use ($request, $id) {
-//                $roles = [];
-//                array_map(function ($role) {
-//                    $roles[] = Role::findByName($role);
-//                }, $request->role);
 
                 $user = User::findOrFail($id);
                 $user->email = $request->email;
@@ -114,7 +110,6 @@ class UserController extends Controller
                 $user->positions_id = $request->position;
                 $user->save();
 
-//                dd($roles);
                 $user->syncRoles($request->role);
             });
 
@@ -170,16 +165,11 @@ class UserController extends Controller
         try {
             $user = $request->user();
 
-            // $user->assignRole(RoleEnum::SUPER_ADMIN);
-            // Role::findBYName(RoleEnum::SUPER_ADMIN->value)->givePermissionTo(Permission::all());
-            // $role = Role::findByName(RoleEnum::HR->value);
             return response()->json([
                 'msg' => 'Role assigned successfully',
                 'role' => $user->hasAnyRole([RoleEnum::HR, RoleEnum::SUPER_ADMIN]),
                 'permission' => $user->hasPermissionTo(PermissionEnum::ADD_NEW_USERS->value),
             ]);
-
-            return back()->with('success', 'Role assigned successfully');
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             return back()->withErrors(['msg' => 'Failed to assign role']);

@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import AppBar from '@/Layouts/AppBar';
 import MainLayout from '@/Layouts/MainLayout';
 import { Request } from '@/types/request';
-import { Head, router, usePage } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown, FilePenLine } from 'lucide-react';
 import React from 'react';
@@ -73,26 +73,14 @@ export default function RequestApprovalPage({
                     <div>
                         <Button
                             variant="ghost"
-                            onClick={
-                                () => {
-                                    setOpen(true);
-                                    setRowData(leaveRequest);
-                                }
-                                // router.visit(route('request.show', dept.id))
-                            }
+                            onClick={() => {
+                                setOpen(true);
+                                setRowData(leaveRequest);
+                            }}
                         >
                             <FilePenLine className="mr-2" />
                             Actions
                         </Button>
-                        {/* <Button
-                            variant="ghost"
-                            onClick={() =>
-                                router.visit(route('request.show', leaveRequest.id))
-                            }
-                        >
-                            <Ban className="mr-2" />
-                            Reject
-                        </Button> */}
                     </div>
                 );
             },
@@ -116,7 +104,7 @@ export default function RequestApprovalPage({
                             columns={columns}
                             data={requests}
                             filterColumnName="leaveType"
-                            addDataButton={AddLeaveButton()}
+                            addDataButton={<div />}
                         />
                     </div>
                 </div>
@@ -128,16 +116,5 @@ export default function RequestApprovalPage({
                 />
             </div>
         </MainLayout>
-    );
-}
-
-function AddLeaveButton() {
-    return (
-        <button
-            onClick={() => router.visit(route('request.create'))}
-            className="ml-4 rounded-md bg-blue-500 px-4 py-2 text-white"
-        >
-            Add New Leave Request
-        </button>
     );
 }

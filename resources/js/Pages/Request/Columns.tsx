@@ -46,7 +46,33 @@ export const columns: ColumnDef<Request>[] = [
         accessorKey: 'status',
         header: 'Status',
     },
-    //TODO ('add new column for last approval and next approval')
+    {
+        id: 'lastApproval',
+        header: 'Last Approval',
+        cell: ({ row }) => {
+            const leaveRequest = row.original as Request;
+
+            return (
+                leaveRequest.leave_approvals &&
+                leaveRequest.leave_approvals.length > 0 &&
+                leaveRequest.leave_approvals[0].approver?.name
+            );
+        },
+    },
+    {
+        id: 'nextApproval',
+        header: 'Next Approval',
+        cell: ({ row }) => {
+            const leaveRequest = row.original as Request;
+
+            return (
+                leaveRequest.leave_approvals &&
+                leaveRequest.leave_approvals.length > 0 &&
+                leaveRequest.leave_approvals[0].approval_level.next_approval
+                    ?.position?.name
+            );
+        },
+    },
     {
         id: 'actions',
         header: 'Actions',

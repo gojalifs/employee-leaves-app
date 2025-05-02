@@ -9,6 +9,7 @@ use Inertia\Inertia;
 
 use App\Enums\RoleEnum;
 use App\Http\Controllers\ApprovalLevelsController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentsController;
 use App\Http\Controllers\LeavesController;
 use App\Http\Controllers\ProfileController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\RequestApprovalController;
 use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
+    return redirect()->route('dashboard');
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
@@ -24,9 +26,7 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('set_password', [UserController::class, 'set_password'])->name('set.password');
@@ -88,13 +88,6 @@ Route::middleware('auth')->group(function () {
         Route::patch('edit/{id}', [PositionsController::class, 'update'])->name('position.update');
         Route::delete('delete/{id}', [PositionsController::class, 'destroy'])->name('position.destroy');
     });
-
-    // Route::group([
-    //     'prefix'        => 'request_approval',
-    //     'middleware'    => ['role:' . RoleEnum::MIDDLE_MANAGEMENT->value . '|' . RoleEnum::UPPER_MANAGEMENT->value . '|' . RoleEnum::MANAGERIAL->value . '|' . RoleEnum::EXECUTIVE->value]
-    // ], function(){
-    //     Route::get('/', [LeaveHistoryController])
-    // });
 
     Route::resource('request_approval', RequestApprovalController::class)->middleware([
         'role:' . RoleEnum::MIDDLE_MANAGEMENT->value . '|' . RoleEnum::UPPER_MANAGEMENT->value .
