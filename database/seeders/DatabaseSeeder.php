@@ -20,9 +20,9 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             LeavesSeeder::class,
             UserLeavesSeeder::class,
-            LeaveHistorySeeder::class,
+            // LeaveHistorySeeder::class,
             ApprovalLevelsSeeder::class,
-            LeaveApprovalsSeeder::class,
+            // LeaveApprovalsSeeder::class,
         ]);
     }
 }

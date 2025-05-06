@@ -34,11 +34,14 @@ class RequestApprovalController extends Controller
                     $query->where('departments_id', $user->departments_id)
                         ->where('positions_id', '<', $user->positions_id);
                 })
-                ->whereRelation('leaveApprovals', function (Builder $query) use ($user) {
-                    $query->where('approver_id', '!=', $user->id);
+                ->where(function (Builder $query) use ($user) {
+                    $query->whereRelation('leaveApprovals', function (Builder $subQuery) use ($user) {
+                        $subQuery->where('approver_id', '!=', $user->id);
+                    })->orWhereDoesntHave('leaveApprovals');
                 })
                 ->where('status', 'pending')
                 ->get();
+                
             return Inertia::render('RequestApproval/Index', [
                 'requests' => $leaveRequest,
             ]);

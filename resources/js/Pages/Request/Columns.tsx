@@ -77,11 +77,14 @@ export const columns: ColumnDef<Request>[] = [
         id: 'actions',
         header: 'Actions',
         cell: ({ row }) => {
-            const dept = row.original as Request;
+            const request = row.original as Request;
             return (
                 <Button
                     variant="ghost"
-                    onClick={() => router.visit(route('request.show', dept.id))}
+                    onClick={() =>
+                        router.visit(route('request.show', request.id))
+                    }
+                    disabled={request.status === 'approved'}
                 >
                     <FilePenLine className="mr-2" />
                     Edit
