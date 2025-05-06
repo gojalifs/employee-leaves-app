@@ -19,4 +19,19 @@ class LeaveHistory extends Model
         'reason',
         'note',
     ];
+
+    public function leaveType()
+    {
+        return $this->belongsTo(Leaves::class, 'leaves_id');
+    }
+
+    public function leaveApprovals()
+    {
+        return $this->hasMany(LeaveApprovals::class, 'leave_history_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

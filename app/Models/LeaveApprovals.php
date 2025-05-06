@@ -12,9 +12,19 @@ class LeaveApprovals extends Model
 
     protected $fillable = [
         'leave_history_id',
-        'approval_level_id',
+        'approval_levels_id',
         'approver_id',
         'status',
         'comment',
     ];
+
+    public function approval_level()
+    {
+        return $this->belongsTo(ApprovalLevels::class, 'approval_levels_id');
+    }
+
+    public function approver()
+    {
+        return $this->belongsTo(User::class, 'approver_id');
+    }
 }

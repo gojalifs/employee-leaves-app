@@ -16,12 +16,13 @@ class DatabaseSeeder extends Seeder
         $this->call([
             DepartmentsSeeder::class,
             PositionsSeeder::class,
+            RolePermissionSeeder::class,
             UserSeeder::class,
             LeavesSeeder::class,
             UserLeavesSeeder::class,
-            LeaveHistorySeeder::class,
+            // LeaveHistorySeeder::class,
             ApprovalLevelsSeeder::class,
-            LeaveApprovalsSeeder::class,
+            // LeaveApprovalsSeeder::class,
         ]);
     }
 }

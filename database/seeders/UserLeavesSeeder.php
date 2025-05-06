@@ -16,7 +16,7 @@ class UserLeavesSeeder extends Seeder
     public function run(): void
     {
         UserLeaves::create([
-            'user_id' => rand(2, 7),
+            'user_id' => 2,
             'leaves_id' => Leaves::first()->id,
             'remaining_leaves' => 12,
         ]);
