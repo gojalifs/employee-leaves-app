@@ -42,6 +42,11 @@ export default function ChangePasswordForm() {
             <Toaster />
             <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
                 <Form {...form}>
+                    <h2 className="mb-2 text-center">
+                        <span className="text-center text-2xl font-bold text-gray-800">
+                            Set New Password
+                        </span>
+                    </h2>
                     <form
                         onSubmit={form.handleSubmit(onSubmit)}
                         className="space-y-6"
