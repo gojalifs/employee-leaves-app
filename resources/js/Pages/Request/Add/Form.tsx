@@ -28,7 +28,7 @@ import { Leave } from '@/types/leave';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { router } from '@inertiajs/react';
 import { format } from 'date-fns';
-import { Calendar1Icon } from 'lucide-react';
+import { Calendar1Icon, Loader2 } from 'lucide-react';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -61,6 +61,27 @@ export default function AddForm({ leaves }: { leaves: EmployeeLeave[] }) {
     const [userLeave, setUserLeave] = React.useState<EmployeeLeave | undefined>(
         undefined,
     );
+
+    const [isSubmitting, setIsSubmitting] = React.useState(false);
+
+    const onSubmit = async (data: z.infer<typeof formSchema>) => {
+        setIsSubmitting(true); // 👉 mulai submitting
+        try {
+            await router.post(route('request.store'), data, {
+                onError: (e) => {
+                    toast.error('Failed to create leave request');
+                    console.error(e);
+                },
+                onFinish: () => {
+                    setIsSubmitting(false); // 👉 selesai
+                },
+            });
+        } catch (err) {
+            console.error(err);
+            toast.error('Unexpected error');
+            setIsSubmitting(false);
+        }
+    };
 
     return (
         <div className="mx-auto max-w-2xl rounded-lg bg-white p-6 shadow-md">
@@ -388,25 +409,17 @@ export default function AddForm({ leaves }: { leaves: EmployeeLeave[] }) {
                     <Button
                         type="submit"
                         className="w-full rounded-md bg-blue-500 py-2 text-white hover:bg-blue-600"
+                        disabled={isSubmitting}
                     >
-                        Create Request
+                        {isSubmitting && (
+                            <Loader2 className="h-5 w-5 animate-spin" />
+                        )}
+                        {isSubmitting ? 'Submitting...' : 'Create Request'}
                     </Button>
                 </form>
             </Form>
         </div>
     );
-}
-
-function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log(data);
-
-    // Handle form submission
-    router.post(route('request.store'), data, {
-        onError: (e) => {
-            console.log(e);
-            toast.error('Failed to create leave request');
-        },
-    });
 }
 
 function calculateMaxDate(

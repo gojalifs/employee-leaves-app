@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @mixin IdeHelperApprovalLevels
+ */
 class ApprovalLevels extends Model
 {
     use HasFactory, SoftDeletes;
@@ -34,5 +37,9 @@ class ApprovalLevels extends Model
 
     public function requester_position(){
         return $this->belongsTo(Positions::class, 'requester_position_id');
+    }
+
+    public function user(){
+        return $this->hasMany(User::class, 'departments_id', 'departments_id');
     }
 }
