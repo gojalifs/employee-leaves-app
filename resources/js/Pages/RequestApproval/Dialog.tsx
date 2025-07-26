@@ -32,7 +32,7 @@ export default function ConfirmDialog({
                         </strong>{' '}
                         has requested a leave of type {rowData?.leave_type.name}{' '}
                         starting from <strong> {rowData?.start_date} </strong>{' '}
-                        until <strong> {rowData?.end_date}. Please</strong>{' '}
+                        until <strong> {rowData?.end_date}</strong> . Please
                         review the details and confirm your action.
                     </p>
                     <div className="flex gap-2">
