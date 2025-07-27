@@ -9,9 +9,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Represents the Positions model in the application.
+ * 
  * Includes factory and soft delete capabilities.
  * Manages the 'name' attribute as a fillable property.
+ *
  * @mixin Builder
+ * @mixin IdeHelperPositions
  */
 class Positions extends Model
 {

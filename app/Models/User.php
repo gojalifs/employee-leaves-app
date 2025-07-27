@@ -12,9 +12,12 @@ use Spatie\Permission\Traits\HasRoles;
 
 /**
  * Represents the Positions model in the application.
+ * 
  * Includes factory and soft delete capabilities.
  * Manages the 'name' attribute as a fillable property.
+ *
  * @mixin Builder
+ * @mixin IdeHelperUser
  */
 class User extends Authenticatable
 {
@@ -33,8 +36,8 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'department_id',
-        'position_id',
+        'departments_id',
+        'positions_id',
         'address',
         'email',
         'password',

@@ -35,13 +35,13 @@ class AuthenticatedSessionController extends Controller
 
         $user = User::where('email', $request->email)->first();
         if ($user->is_default_password == 1) {
-            return redirect()->intended(route('set.password'));
+            return redirect(route('set.password'));
         }
-
         $request->session()->regenerate();
 
         return redirect()->intended(route('dashboard', absolute: false));
     }
+
 
     /**
      * Destroy an authenticated session.

@@ -4,14 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LeaveHistoryCreateRequest;
 use App\Http\Requests\LeaveHistoryUpdateRequest;
+use App\Mail\UserLeaveCreatedMail;
+use App\Models\ApprovalLevels;
 use App\Models\LeaveHistory;
 use App\Models\Leaves;
+use App\Models\User;
 use App\Models\UserLeaves;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
+use Throwable;
 
 class LeaveHistoryController extends Controller
 {
@@ -39,7 +44,7 @@ class LeaveHistoryController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->get();
             return Inertia::render('Request/Index', ['requests' => $leaveRequest]);
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             // Log the error message
             Log::error($th->getMessage());
 
@@ -72,7 +77,7 @@ class LeaveHistoryController extends Controller
                 'requests'      => $leaveRequest,
                 'leave_types'   => $leaveTypes
             ]);
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             // Log the error message
             Log::error($th->getMessage());
 
@@ -90,7 +95,9 @@ class LeaveHistoryController extends Controller
             $validated = $request->validated();
             $user = $request->user();
 
-            DB::transaction(function () use ($validated, $user) {
+            $newLeave = null;
+
+            DB::transaction(function () use ($validated, $user, &$newLeave) {
                 // Check if the leave type is available for the user
                 $leaveType = UserLeaves::where('user_id', $user->id)
                     ->where('leaves_id', $validated['leave_type_id'])
@@ -136,7 +143,7 @@ class LeaveHistoryController extends Controller
                 }
 
                 // Create new leave request for user
-                LeaveHistory::create([
+                $newLeave = LeaveHistory::create([
                     'user_id'       => $user->id,
                     'leaves_id'     => $validated['leave_type_id'],
                     'start_date'    => date('Y-m-d', strtotime($validated['start_date'])),
@@ -150,8 +157,27 @@ class LeaveHistoryController extends Controller
                 $leaveType->save();
             });
 
+            // Send email notification
+            $firstApproval = ApprovalLevels::where('departments_id', $user->departments_id)
+                ->where('requester_position_id', $user->positions_id)
+                ->where('level', 1)
+                ->first();
+
+            $recipients = User::where('departments_id', $firstApproval->departments_id)
+                ->where('positions_id', $firstApproval->positions_id)
+                ->pluck('email');
+
+            // $recipients = $recipient->next_approval->user->pluck('email')->toArray();
+
+            $user = User::findOrFail($user->id);
+
+            // return (new UserLeaveCreatedMail())->render();
+            Mail::to($recipients)->send(new UserLeaveCreatedMail($user, $newLeave));
+
+            Log::info('Email sent to user: ' . implode(', ', $recipients->toArray()));
+
             return to_route('request.index')->with('message', 'Leave request created successfully');
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             // Log the error message
             Log::error($th->getMessage());
 
@@ -175,7 +201,7 @@ class LeaveHistoryController extends Controller
             return Inertia::render('Request/Edit/EditLeaveRequestPage', [
                 'user_leave' => $leaveHistory
             ]);
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             // Log the error message
             Log::error($th->getMessage());
 
@@ -205,7 +231,7 @@ class LeaveHistoryController extends Controller
             $leaveType = UserLeaves::where('user_id', $user->id)
                 ->where('leaves_id', $validated['leave_type_id'])
                 ->first();
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             //throw $th;
         }
     }
@@ -276,7 +302,7 @@ class LeaveHistoryController extends Controller
             });
 
             return to_route('request.index')->with('message', 'Leave request cancelled successfully');
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             // Log the error message
             Log::error($th->getMessage());
 
